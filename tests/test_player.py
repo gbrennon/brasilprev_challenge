@@ -1,6 +1,6 @@
 import unittest
 
-from factories import PlayerFactory
+from factories import PlayerFactory, PropertyFactory
 
 class PlayerTestCases(unittest.TestCase):
     def setUp(self):
@@ -27,3 +27,47 @@ class PlayerTestCases(unittest.TestCase):
 
         self.assertEqual(self.player.position, future_position)
         self.assertEqual(self.player.balance, future_balance)
+
+    def test_player_can_buy(self):
+        property_ = PropertyFactory()
+        price = property_.sale_price
+        self.player.balance = price
+
+        self.assertTrue(self.player.can_buy(property_))
+
+    def test_player_cant_buy_because_of_money(self):
+        property_ = PropertyFactory()
+        price = property_.sale_price
+        self.player.balance = price - 1
+
+        self.assertFalse(self.player.can_buy(property_))
+
+    def test_player_cant_buy_because_is_owner(self):
+        property_ = PropertyFactory(owner=self.player)
+        self.player.properties.append(property_)
+
+        price = property_.sale_price
+        self.player.balance = price
+
+        self.assertFalse(self.player.can_buy(property_))
+
+    def test_player_cant_buy_someone_else_is_owner(self):
+        property_ = PropertyFactory(owner=PlayerFactory())
+        self.player.properties.append(property_)
+
+        price = property_.sale_price
+        self.player.balance = price
+
+        self.assertFalse(self.player.can_buy(property_))
+
+    def test_player_bought_property(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price
+        future_balance = self.player.balance - property_.sale_price
+
+        result = self.player.buy(property_)
+
+        self.assertEqual(self.player.balance, future_balance)
+        self.assertIn(property_, self.player.properties)
+        self.assertEqual(self.player, property_.owner)
+        self.assertEqual(self.player.balance, result)

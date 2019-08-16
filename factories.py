@@ -1,5 +1,5 @@
 from random import randint
-from factory import Factory, Faker, fuzzy
+from factory import Factory, Faker, fuzzy, SubFactory
 
 from player import Player, Behavior
 from property import Property, SALE_BOUNDARIES, RENTAL_BOUNDARIES
@@ -19,3 +19,4 @@ class PropertyFactory(Factory):
 
     sale_price = fuzzy.FuzzyAttribute(lambda: randint(*SALE_BOUNDARIES))
     rental_price = fuzzy.FuzzyAttribute(lambda: randint(*RENTAL_BOUNDARIES))
+    owner = SubFactory(PlayerFactory)
