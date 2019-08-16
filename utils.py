@@ -1,5 +1,4 @@
 from random import randint
-from config import DICE_MAX_VALUE
 
 def check_value_in_boundary(value, min_, max_):
     if min_ <= value <= max_:
