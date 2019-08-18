@@ -1,6 +1,16 @@
 import unittest
+from unittest import mock
 
-from factories import PlayerFactory, PropertyFactory
+from factories import (
+    PlayerFactory,
+    ImpulsivePlayerFactory,
+    DemandingPlayerFactory,
+    CautiousPlayerFactory,
+    RandomPlayerFactory,
+    PropertyFactory
+)
+
+from player import Player
 
 class PlayerTestCases(unittest.TestCase):
     def setUp(self):
@@ -71,3 +81,79 @@ class PlayerTestCases(unittest.TestCase):
         self.assertIn(property_, self.player.properties)
         self.assertEqual(self.player, property_.owner)
         self.assertEqual(self.player.balance, result)
+
+
+class ImpulsivePlayerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.player = ImpulsivePlayerFactory()
+
+    def test_impulsive_player_is_a_player(self):
+        self.assertIsInstance(self.player, Player)
+
+    def test_impulsive_player_can_buy(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price
+
+        self.assertTrue(self.player.can_buy(property_))
+
+
+class DemandingPlayerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.player = DemandingPlayerFactory()
+
+    def test_demanding_player_is_a_player(self):
+        self.assertIsInstance(self.player, Player)
+
+    def test_demanding_player_can_buy(self):
+        property_ = PropertyFactory(rental_price=51)
+        self.player.balance = property_.sale_price
+
+        self.assertTrue(self.player.can_buy(property_))
+
+    def test_demanding_player_cant_buy(self):
+        property_ = PropertyFactory(rental_price=49)
+        self.player.balance = property_.sale_price
+
+        self.assertFalse(self.player.can_buy(property_))
+
+
+class CautiousPlayerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.player = CautiousPlayerFactory()
+
+    def test_cautious_player_is_a_player(self):
+        self.assertIsInstance(self.player, Player)
+
+    def test_cautious_player_can_buy(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price + 80
+
+        self.assertTrue(self.player.can_buy(property_))
+
+    def test_cautious_player_cant_buy(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price + 79
+
+        self.assertFalse(self.player.can_buy(property_))
+
+
+class RandomPlayerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.player = RandomPlayerFactory()
+
+    def test_random_player_is_a_player(self):
+        self.assertIsInstance(self.player, Player)
+
+    def test_random_player_can_buy(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price
+
+        with mock.patch('random.randint', lambda a, b: 1):
+            self.assertTrue(self.player.can_buy(property_))
+
+    def test_random_player_cant_buy(self):
+        property_ = PropertyFactory()
+        self.player.balance = property_.sale_price
+
+        with mock.patch('random.randint', lambda a, b: 0):
+            self.assertFalse(self.player.can_buy(property_))

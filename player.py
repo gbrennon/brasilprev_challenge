@@ -1,17 +1,10 @@
 from enum import Enum
-
-
-class Behavior(Enum):
-    IMPULSIVE = 0
-    DEMANDING = 1
-    CAUTIOUS = 2
-    RANDOM = 3
+import random
 
 
 class Player:
-    def __init__(self, name, behavior=Behavior.IMPULSIVE, balance=300):
+    def __init__(self, name, balance=300):
         self.name = name
-        self.behavior = behavior
         self.balance = balance
         self.position = 0
         self.properties = []
@@ -39,3 +32,24 @@ class Player:
         property_.owner = self
 
         return self.balance
+
+
+class ImpulsivePlayer(Player):
+    def can_buy(self, property_):
+        return super().can_buy(property_)
+
+
+class DemandingPlayer(Player):
+    def can_buy(self, property_):
+        return super().can_buy(property_) and property_.rental_price > 50
+
+
+class CautiousPlayer(Player):
+    def can_buy(self, property_):
+        value_after_buy = self.balance - property_.sale_price
+        return super().can_buy(property_) and value_after_buy >= 80
+
+
+class RandomPlayer(Player):
+    def can_buy(self, property_):
+        return super().can_buy(property_) and random.randint(0, 1) == 1
