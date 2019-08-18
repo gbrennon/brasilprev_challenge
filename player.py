@@ -8,7 +8,7 @@ class Behavior(Enum):
     RANDOM = 3
 
 
-class Player(object):
+class Player:
     def __init__(self, name, behavior=Behavior.IMPULSIVE, balance=300):
         self.name = name
         self.behavior = behavior
@@ -21,16 +21,14 @@ class Player(object):
         old_position = self.position
         self.position += steps
 
-        if(self.position >= 20):
+        if self.position >= 20:
             self.position -= 20
             self.balance += 100
 
     def can_buy(self, property_):
-        if (
-            self.balance >= property_.sale_price and
-            property_ not in self.properties and
-            property_.owner
-        ):
+        if (self.balance >= property_.sale_price and
+                property_ not in self.properties and
+                property_.owner):
             return True
         return False
 
