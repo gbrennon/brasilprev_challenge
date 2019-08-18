@@ -5,13 +5,13 @@ from factories import PropertyFactory, SALE_BOUNDARIES, RENTAL_BOUNDARIES
 class PropertyTestCases(unittest.TestCase):
     def test_property_sale_price_in_boundaries(self):
         try:
-            p = PropertyFactory(sale_price=SALE_BOUNDARIES[1])
+            PropertyFactory(sale_price=SALE_BOUNDARIES[1])
         except ValueError:
             self.fail('Property sale_price raised ValueError unexpectedly!')
 
     def test_property_rental_price_in_boundaries(self):
         try:
-            p = PropertyFactory(rental_price=RENTAL_BOUNDARIES[1])
+            PropertyFactory(rental_price=RENTAL_BOUNDARIES[1])
         except ValueError:
             self.fail('Property rental_price raised ValueError unexpectedly!')
 
