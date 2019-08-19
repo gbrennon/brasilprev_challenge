@@ -7,7 +7,7 @@ def check_value_in_boundary(value, min_, max_):
 
 
 class Dice(object):
-    def __init__(self, sides):
+    def __init__(self, sides=6):
         self.min = 1
         self.max = sides
 
