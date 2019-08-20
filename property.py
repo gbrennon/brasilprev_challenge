@@ -5,7 +5,7 @@ from utils import check_value_in_boundary
 
 
 class Property:
-    def __init__(self, sale_price=80, rental_price=10, owner=None):
+    def __init__(self, sale_price=50, rental_price=2, owner=None):
         if not check_value_in_boundary(sale_price, *SALE_BOUNDARIES):
             raise ValueError('Sale price({}) must be between {} and {}'
                              .format(sale_price, *SALE_BOUNDARIES))

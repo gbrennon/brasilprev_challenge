@@ -1,10 +1,12 @@
 from enum import Enum
 import random
 
+from config import ROUND_CASH
+
 
 class Player:
-    def __init__(self, name, balance=300):
-        self.name = name
+    def __init__(self, balance=300):
+        # self.name = name
         self.balance = balance
         self.position = 0
         self.properties = []
@@ -14,22 +16,21 @@ class Player:
 
         if self.position >= 20:
             self.position -= 20
-            self.balance += 100
+            self.balance += ROUND_CASH
 
     def can_buy(self, property_):
-        if (self.balance >= property_.sale_price and
-                property_ not in self.properties and
-                property_.owner):
+        if ((self.balance >= property_.sale_price) and
+                not (property_ in self.properties) and
+                not property_.owner):
             return True
         return False
 
     def buy(self, property_):
         # the game engine must ensure to call this after can_buy method
+        print('comprou!')
         self.balance -= property_.sale_price
         self.properties.append(property_)
         property_.owner = self
-
-        return self.balance
 
 
 class ImpulsivePlayer(Player):

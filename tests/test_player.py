@@ -1,6 +1,8 @@
 import unittest
 from unittest import mock
 
+from config import ROUND_CASH
+
 from factories import (
     PlayerFactory,
     ImpulsivePlayerFactory,
@@ -31,7 +33,7 @@ class PlayerTestCases(unittest.TestCase):
         steps_to_move = 6
 
         future_position = self.player.position + steps_to_move - 20
-        future_balance = self.player.balance + 100
+        future_balance = self.player.balance + ROUND_CASH
 
         self.player.move(steps_to_move)
 
@@ -75,12 +77,11 @@ class PlayerTestCases(unittest.TestCase):
         self.player.balance = property_.sale_price
         future_balance = self.player.balance - property_.sale_price
 
-        result = self.player.buy(property_)
+        self.player.buy(property_)
 
         self.assertEqual(self.player.balance, future_balance)
         self.assertIn(property_, self.player.properties)
         self.assertEqual(self.player, property_.owner)
-        self.assertEqual(self.player.balance, result)
 
 
 class ImpulsivePlayerTestCase(unittest.TestCase):
