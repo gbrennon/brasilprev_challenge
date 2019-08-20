@@ -42,13 +42,14 @@ class PlayerTestCases(unittest.TestCase):
 
     def test_player_can_buy(self):
         property_ = PropertyFactory()
-        price = property_.sale_price
-        self.player.balance = price
+        property_.owner = None
+        property_.sale_price = 0
+        self.player.balance = 1000
 
         self.assertTrue(self.player.can_buy(property_))
 
     def test_player_cant_buy_because_of_money(self):
-        property_ = PropertyFactory()
+        property_ = PropertyFactory(owner=None)
         price = property_.sale_price
         self.player.balance = price - 1
 
@@ -92,7 +93,7 @@ class ImpulsivePlayerTestCase(unittest.TestCase):
         self.assertIsInstance(self.player, Player)
 
     def test_impulsive_player_can_buy(self):
-        property_ = PropertyFactory()
+        property_ = PropertyFactory(owner=None)
         self.player.balance = property_.sale_price
 
         self.assertTrue(self.player.can_buy(property_))
@@ -106,7 +107,7 @@ class DemandingPlayerTestCase(unittest.TestCase):
         self.assertIsInstance(self.player, Player)
 
     def test_demanding_player_can_buy(self):
-        property_ = PropertyFactory(rental_price=51)
+        property_ = PropertyFactory(rental_price=51, owner=None)
         self.player.balance = property_.sale_price
 
         self.assertTrue(self.player.can_buy(property_))
@@ -126,7 +127,7 @@ class CautiousPlayerTestCase(unittest.TestCase):
         self.assertIsInstance(self.player, Player)
 
     def test_cautious_player_can_buy(self):
-        property_ = PropertyFactory()
+        property_ = PropertyFactory(owner=None)
         self.player.balance = property_.sale_price + 80
 
         self.assertTrue(self.player.can_buy(property_))
@@ -146,7 +147,7 @@ class RandomPlayerTestCase(unittest.TestCase):
         self.assertIsInstance(self.player, Player)
 
     def test_random_player_can_buy(self):
-        property_ = PropertyFactory()
+        property_ = PropertyFactory(owner=None)
         self.player.balance = property_.sale_price
 
         with mock.patch('random.randint', lambda a, b: 1):

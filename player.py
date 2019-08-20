@@ -22,11 +22,14 @@ class Player:
             self.balance += ROUND_CASH
 
     def can_buy(self, property_):
-        if ((self.balance >= property_.sale_price) and
-                not (property_ in self.properties) and
-                not property_.owner):
+        if(
+                self.balance >= property_.sale_price and
+                property_ not in self.properties and
+                not property_.owner
+        ):
             return True
-        return False
+        else:
+            return False
 
     def buy(self, property_):
         # the game engine must ensure to call this after can_buy method
@@ -42,15 +45,15 @@ class ImpulsivePlayer(Player):
 
 class DemandingPlayer(Player):
     def can_buy(self, property_):
-        return super().can_buy(property_) and property_.rental_price > 50
+        return (super().can_buy(property_) and property_.rental_price > 50)
 
 
 class CautiousPlayer(Player):
     def can_buy(self, property_):
         value_after_buy = self.balance - property_.sale_price
-        return super().can_buy(property_) and value_after_buy >= 80
+        return (super().can_buy(property_) and value_after_buy >= 80)
 
 
 class RandomPlayer(Player):
     def can_buy(self, property_):
-        return super().can_buy(property_) and random.randint(0, 1) == 1
+        return (super().can_buy(property_) and random.randint(0, 1) == 1)
