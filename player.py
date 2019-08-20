@@ -11,6 +11,9 @@ class Player:
         self.position = 0
         self.properties = []
 
+    def __str__(self):
+        return self.__class__.__name__
+
     def move(self, steps):
         self.position += steps
 
@@ -27,7 +30,6 @@ class Player:
 
     def buy(self, property_):
         # the game engine must ensure to call this after can_buy method
-        print('comprou!')
         self.balance -= property_.sale_price
         self.properties.append(property_)
         property_.owner = self
