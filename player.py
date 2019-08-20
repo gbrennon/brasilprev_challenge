@@ -10,8 +10,6 @@ class Player:
         self.properties = []
 
     def move(self, steps):
-        # This should make the player move
-        old_position = self.position
         self.position += steps
 
         if self.position >= 20:
